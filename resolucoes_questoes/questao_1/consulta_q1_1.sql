@@ -1,4 +1,4 @@
-SELECT 
+SELECT
     COUNT(*) AS total_linhas,
     MIN(created_at) AS data_minima,
     MAX(created_at) AS data_maxima,
