@@ -36,7 +36,7 @@ Cada subpasta contém a solução técnica acompanhada de documentação explica
 
 * **Python 3.13.7**
   * *Bibliotecas Nativas:* `csv`, `os`, `re`, `sqlite3`
-  * *Bibliotecas Externas:* `pandas`, `numpy`
+  * *Bibliotecas Externas:* `pandas`, `numpy`, `psycopg2`
 * **SQL** (ANSI SQL / PostgreSQL Dialect)
 
 ### 🤖 Agentes de IA
@@ -45,7 +45,7 @@ Cada subpasta contém a solução técnica acompanhada de documentação explica
 * **Gemini 3.6**
 * **Codex**
 
-*Auxiliaram na revisão de código, documentação, e sugestões de boas práticas.*
+*Auxiliaram na revisão e geração de código, documentação, e sugestões de boas práticas.*
 
 ---
 

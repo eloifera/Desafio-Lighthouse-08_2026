@@ -101,7 +101,7 @@ A inferência analisa os registros válidos de cada coluna para garantir que o t
 O script mapeia as convenções de nomenclatura corporativa (`entidade_id`) para construir os relacionamentos relacionais:
 
 - O script identifica colunas que representam **Foreign Keys** e gera as constraints correspondentes no DDL. Seguindo valores definidos na variável `mapeamentos_especificos` no script, que pode ser ajustada conforme a convenção de nomenclatura da empresa. Detectando relacionamentos de **Fluxo Comercial, Catálogo de Produtos e Hierarquias de Categorias**.
-- Além disso, o script também identifica e cria **Hierarquia Auto-Referenciada e Tabelas Associativas N:N** (Chaves primárias compostas para garantir unicidade).
+- Além disso, o script também identifica e cria **Hierarquia Auto-Referenciada e Tabelas Associativas N:N** por meio da constante `TABELAS_JUNCAO_PK`(Chaves primárias compostas para garantir unicidade).
 
 ---
 
@@ -114,4 +114,4 @@ Certifique-se de estar com o Python 3 instalado no sistema. Não é necessário 
 python gerar_schema.py
 ```
 
-O script realizará a leitura dos arquivos CSV presentes no seu diretório e gerará o arquivo `schema.sql` no mesmo diretório. Caso não haja arquivos CSV no diretório, primeiro é solicitado input do endereço do diretório contendo os arquivos CSV. Se o diretório não for fornecido ou for inválido, o script exibirá uma mensagem de erro e encerrará a execução.
+O script realizará a leitura dos arquivos CSV presentes no seu diretório e gerará o arquivo `schema.sql` no mesmo diretório. Caso não haja arquivos CSV no diretório,o script exibirá uma mensagem de erro e encerrará a execução.
