@@ -11,6 +11,11 @@ Telefone, CPF/CNPJ como VARCHAR).
    coluna carrega um qualificador de papel (buyer_id, received_by_employee_id, ...).
 5. Declara PRIMARY KEY composta nas tabelas de junção, validando a unicidade nos dados.
 6. Gera um arquivo de saída chamado 'schema.sql' com os DDLs completos.
+
+A constante de configuração TEXT_IDENTIFIER_KEYWORDS (utilizada para identificar colunas específicas
+que serão tratadas como identificadores textuais) e a variável mapeamentos_especificos (utilizada
+para definir mapeamentos específicos do usuário para foreign keys) podem ser ajustadas para atender
+a diferentes convenções de nomenclatura.
 """
 
 import csv
@@ -163,7 +168,8 @@ def obter_referencia_fk(nome_coluna, tabelas_existentes):
 
     entidade = nome_coluna[:-3].lower()  # Remove '_id'
 
-    # Exceções e mapeamentos específicos de nomenclatura
+    # Exceções e mapeamentos específicos de nomenclatura para
+    # relacionar foreign keys com tabelas corretas.
     mapeamentos_especificos = {
         "salesperson": "employees",
         "created_by_employee": "employees",
@@ -191,16 +197,20 @@ def obter_referencia_fk(nome_coluna, tabelas_existentes):
     #   received_by_employee -> by_employee -> employee  (employees)
     #   primary_location / destination_location          (locations)
     #   parent_category                                  (categories, auto-referência)
-    partes = entidade.split("_")
+    partes = entidade.split("_")  # divide a entidade em partes separadas por '_'
     for i in range(len(partes)):
-        candidato = "_".join(partes[i:])
+        candidato = "_".join(
+            partes[i:]
+        )  # junta as partes restantes para formar o candidato a tabela alvo
 
         if candidato in mapeamentos_especificos:
             tabela_alvo = mapeamentos_especificos[candidato]
             if tabela_alvo in tabelas_existentes:
                 return f"REFERENCES {tabela_alvo}(id)"
+                # Retorna a referência de FOREIGN KEY para a tabela
+                # mapeada no dicionário de mapeamentos específicos.
 
-        # Padrão genérico plural (ex: 'user_id' -> 'users')
+        # Testa os padrões genéricos de plural (ex: 'user_id' -> 'users')
         if f"{candidato}s" in tabelas_existentes:
             return f"REFERENCES {candidato}s(id)"
 
@@ -220,15 +230,21 @@ def chave_composta_valida(caminho_csv, colunas_chave):
                 return False
             vistos.add(chave)
     return bool(vistos)
+    # Checa se todas as combinações de valores nas colunas_chave forem únicas e não nulas.
 
 
 def gerar_schema_com_fks():
+    """Gera o schema SQL com detecção automática de FOREIGN KEYS e PRIMARY KEYS compostas."""
     if not os.path.exists(CSV_DIR):
         print(f"Erro: O diretório '{CSV_DIR}' não foi encontrado.")
         return
-
-    arquivos_csv = sorted([f for f in os.listdir(CSV_DIR) if f.endswith(".csv")])
-    tabelas_existentes = [os.path.splitext(f)[0] for f in arquivos_csv]
+        # alerta o usuário caso o diretório informado não exista.
+    arquivos_csv = sorted(
+        [f for f in os.listdir(CSV_DIR) if f.endswith(".csv")]
+    )  # lista os arquivos CSV no diretório
+    tabelas_existentes = [
+        os.path.splitext(f)[0] for f in arquivos_csv
+    ]  # lista os nomes das tabelas existentes com base nos arquivos CSV encontrados
 
     print("=" * 80)
     print("GERANDO SCHEMA SQL COM DETECÇÃO AUTOMÁTICA DE FOREIGN KEYS")
@@ -240,10 +256,7 @@ def gerar_schema_com_fks():
     ddl_statements.append(
         "-- =============================================================================="
     )
-    ddl_statements.append("-- Desafio Lighthouse - LH Nautical")
-    ddl_statements.append(
-        "-- Questão 2 (Versão 2): Schema Relacional com Restrições de Foreign Keys"
-    )
+    ddl_statements.append("-- Schema Relacional com Foreign Keys")
     ddl_statements.append(
         "-- Gerado via Python (Bibliotecas Nativas + Mapeamento de Referências)"
     )
@@ -258,15 +271,19 @@ def gerar_schema_com_fks():
         with open(caminho_csv, mode="r", encoding="utf-8") as f:
             reader = csv.DictReader(f)
             colunas = reader.fieldnames or []
-            amostras = {col: [] for col in colunas}
+            amostras = {
+                col: [] for col in colunas
+            }  # cria um dicionário para armazenar amostras de valores de cada coluna
 
             for row in reader:
                 for col in colunas:
                     if row[col] != "":
-                        amostras[col].append(row[col])
+                        amostras[col].append(
+                            row[col]
+                        )  # armazena apenas valores não nulos para inferência de tipo
 
-        defs_colunas = []
-        colunas_fk = []
+        defs_colunas = []  # lista para armazenar as definições de colunas no DDL
+        colunas_fk = []  # lista para armazenar as colunas que são chaves estrangeiras
         for col in colunas:
             tipo_sql = inferir_tipo_pg(col, amostras[col])
 
@@ -276,7 +293,10 @@ def gerar_schema_com_fks():
                 tipo_sql = f"{tipo_sql} {ref_fk}"
                 colunas_fk.append(col)
 
-            defs_colunas.append(f"    {col:<26} {tipo_sql}")
+            defs_colunas.append(
+                f"    {col:<26} {tipo_sql}"
+            )  # adiciona a definição da coluna ao DDL,
+            # alinhando o tipo SQL à direita para melhor legibilidade
 
         # Tabelas de junção não têm coluna 'id': a chave primária é o conjunto de FKs.
         # Só declaramos a PK se os dados comprovarem que a combinação é única e não nula.
@@ -288,20 +308,31 @@ def gerar_schema_com_fks():
                 print(
                     f" -> {nome_tabela}: ({', '.join(colunas_fk)}) não é única nos dados; "
                     f"tabela permanece sem PRIMARY KEY"
-                )
+                )  # alerta o usuário caso a combinação de colunas FK não seja única
+                # nos dados, indicando que a tabela não terá uma PRIMARY KEY definida.
 
         corpo_tabela = ",\n".join(defs_colunas)
-        sql_tabela = "-- ------------------------------------------------------------------------------\n"
+        sql_tabela = "-- -----------------------------------------------------------------------\n"
         sql_tabela += f"-- Tabela: {nome_tabela}\n"
-        sql_tabela += "-- ------------------------------------------------------------------------------\n"
+        sql_tabela += "-- -----------------------------------------------------------------------\n"
         sql_tabela += f"CREATE TABLE IF NOT EXISTS {nome_tabela} (\n{corpo_tabela}\n);"
+        # declara a criação da tabela com as definições de colunas e chaves primárias/estrangeiras,
+        # garantindo que a tabela só será criada se não existir previamente.
 
-        ddl_statements.append(sql_tabela)
+        ddl_statements.append(
+            sql_tabela
+        )  # adiciona o DDL da tabela à lista de statements que serão gravados no arquivo final.
 
-    conteudo_final = "\n\n".join(ddl_statements) + "\n"
+    conteudo_final = (
+        "\n\n".join(ddl_statements) + "\n"
+    )  # junta todos os statements DDL em um único conteúdo final,
+    # separando-os por duas linhas em branco para melhor legibilidade.
 
     with open(OUTPUT_SQL, mode="w", encoding="utf-8") as f:
-        f.write(conteudo_final)
+        f.write(
+            conteudo_final
+        )  # grava o conteúdo final no arquivo de saída 'schema_new.sql',
+        # sobrescrevendo qualquer conteúdo existente.
 
     print(f"Sucesso! Schema SQL com Foreign Keys gerado em:\n -> {OUTPUT_SQL}")
     print("=" * 80)

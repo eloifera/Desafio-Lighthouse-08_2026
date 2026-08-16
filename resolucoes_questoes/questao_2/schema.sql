@@ -1,17 +1,15 @@
 -- ==============================================================================
 
--- Desafio Lighthouse - LH Nautical
-
--- Questão 2 (Versão 2): Schema Relacional com Restrições de Foreign Keys
+-- Schema Relacional com Foreign Keys
 
 -- Gerado via Python (Bibliotecas Nativas + Mapeamento de Referências)
 
 -- ==============================================================================
 
 
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 -- Tabela: addresses
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS addresses (
     id                         INTEGER PRIMARY KEY,
     customer_id                INTEGER REFERENCES customers(id),
@@ -27,18 +25,18 @@ CREATE TABLE IF NOT EXISTS addresses (
     is_primary                 BOOLEAN
 );
 
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 -- Tabela: attributes
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS attributes (
     id                         INTEGER PRIMARY KEY,
     name                       VARCHAR(50),
     data_type                  VARCHAR(50)
 );
 
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 -- Tabela: brands
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS brands (
     id                         INTEGER PRIMARY KEY,
     name                       VARCHAR(50),
@@ -48,9 +46,9 @@ CREATE TABLE IF NOT EXISTS brands (
     updated_at                 TIMESTAMP
 );
 
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 -- Tabela: categories
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS categories (
     id                         INTEGER PRIMARY KEY,
     name                       VARCHAR(50),
@@ -61,9 +59,9 @@ CREATE TABLE IF NOT EXISTS categories (
     updated_at                 TIMESTAMP
 );
 
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 -- Tabela: customers
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS customers (
     id                         INTEGER PRIMARY KEY,
     person_type                VARCHAR(50),
@@ -78,9 +76,9 @@ CREATE TABLE IF NOT EXISTS customers (
     updated_at                 TIMESTAMP
 );
 
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 -- Tabela: employees
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS employees (
     id                         INTEGER PRIMARY KEY,
     full_name                  VARCHAR(50),
@@ -95,9 +93,9 @@ CREATE TABLE IF NOT EXISTS employees (
     updated_at                 TIMESTAMP
 );
 
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 -- Tabela: fiscal_invoices
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS fiscal_invoices (
     id                         INTEGER PRIMARY KEY,
     order_id                   INTEGER REFERENCES orders(id),
@@ -112,9 +110,9 @@ CREATE TABLE IF NOT EXISTS fiscal_invoices (
     updated_at                 TIMESTAMP
 );
 
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 -- Tabela: goods_receipt_items
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS goods_receipt_items (
     id                         INTEGER PRIMARY KEY,
     goods_receipt_id           INTEGER REFERENCES goods_receipts(id),
@@ -122,9 +120,9 @@ CREATE TABLE IF NOT EXISTS goods_receipt_items (
     quantity_received          NUMERIC(12, 3)
 );
 
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 -- Tabela: goods_receipts
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS goods_receipts (
     id                         INTEGER PRIMARY KEY,
     purchase_order_id          INTEGER REFERENCES purchase_orders(id),
@@ -134,9 +132,9 @@ CREATE TABLE IF NOT EXISTS goods_receipts (
     created_at                 TIMESTAMP
 );
 
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 -- Tabela: locations
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS locations (
     id                         INTEGER PRIMARY KEY,
     name                       VARCHAR(50),
@@ -154,9 +152,9 @@ CREATE TABLE IF NOT EXISTS locations (
     updated_at                 TIMESTAMP
 );
 
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 -- Tabela: order_items
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS order_items (
     id                         INTEGER PRIMARY KEY,
     order_id                   INTEGER REFERENCES orders(id),
@@ -168,9 +166,9 @@ CREATE TABLE IF NOT EXISTS order_items (
     line_total                 NUMERIC(12, 2)
 );
 
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 -- Tabela: orders
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS orders (
     id                         INTEGER PRIMARY KEY,
     order_number               VARCHAR(50),
@@ -187,9 +185,9 @@ CREATE TABLE IF NOT EXISTS orders (
     updated_at                 TIMESTAMP
 );
 
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 -- Tabela: payments
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS payments (
     id                         INTEGER PRIMARY KEY,
     order_id                   INTEGER REFERENCES orders(id),
@@ -202,9 +200,9 @@ CREATE TABLE IF NOT EXISTS payments (
     updated_at                 TIMESTAMP
 );
 
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 -- Tabela: product_suppliers
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS product_suppliers (
     product_variant_id         INTEGER REFERENCES product_variants(id),
     supplier_id                INTEGER REFERENCES suppliers(id),
@@ -217,9 +215,9 @@ CREATE TABLE IF NOT EXISTS product_suppliers (
     PRIMARY KEY (product_variant_id, supplier_id)
 );
 
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 -- Tabela: product_variants
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS product_variants (
     id                         INTEGER PRIMARY KEY,
     product_id                 INTEGER REFERENCES products(id),
@@ -235,9 +233,9 @@ CREATE TABLE IF NOT EXISTS product_variants (
     updated_at                 TIMESTAMP
 );
 
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 -- Tabela: products
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS products (
     id                         INTEGER PRIMARY KEY,
     name                       VARCHAR(50),
@@ -251,9 +249,9 @@ CREATE TABLE IF NOT EXISTS products (
     updated_at                 TIMESTAMP
 );
 
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 -- Tabela: purchase_order_items
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS purchase_order_items (
     id                         INTEGER PRIMARY KEY,
     purchase_order_id          INTEGER REFERENCES purchase_orders(id),
@@ -263,9 +261,9 @@ CREATE TABLE IF NOT EXISTS purchase_order_items (
     line_total                 NUMERIC(12, 2)
 );
 
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 -- Tabela: purchase_orders
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS purchase_orders (
     id                         INTEGER PRIMARY KEY,
     po_number                  VARCHAR(50),
@@ -282,9 +280,9 @@ CREATE TABLE IF NOT EXISTS purchase_orders (
     updated_at                 TIMESTAMP
 );
 
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 -- Tabela: return_items
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS return_items (
     id                         INTEGER PRIMARY KEY,
     return_id                  INTEGER REFERENCES returns(id),
@@ -295,9 +293,9 @@ CREATE TABLE IF NOT EXISTS return_items (
     unit_refund_amount         NUMERIC(12, 2)
 );
 
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 -- Tabela: returns
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS returns (
     id                         INTEGER PRIMARY KEY,
     return_number              VARCHAR(50),
@@ -311,9 +309,9 @@ CREATE TABLE IF NOT EXISTS returns (
     updated_at                 TIMESTAMP
 );
 
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 -- Tabela: stock_levels
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS stock_levels (
     product_variant_id         INTEGER REFERENCES product_variants(id),
     location_id                INTEGER REFERENCES locations(id),
@@ -323,9 +321,9 @@ CREATE TABLE IF NOT EXISTS stock_levels (
     PRIMARY KEY (product_variant_id, location_id)
 );
 
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 -- Tabela: stock_movements
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS stock_movements (
     id                         INTEGER PRIMARY KEY,
     product_variant_id         INTEGER REFERENCES product_variants(id),
@@ -340,9 +338,9 @@ CREATE TABLE IF NOT EXISTS stock_movements (
     created_at                 TIMESTAMP
 );
 
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 -- Tabela: suppliers
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS suppliers (
     id                         INTEGER PRIMARY KEY,
     legal_name                 VARCHAR(50),
@@ -358,9 +356,9 @@ CREATE TABLE IF NOT EXISTS suppliers (
     updated_at                 TIMESTAMP
 );
 
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 -- Tabela: variant_attribute_values
--- ------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS variant_attribute_values (
     product_variant_id         INTEGER REFERENCES product_variants(id),
     attribute_id               INTEGER REFERENCES attributes(id),
