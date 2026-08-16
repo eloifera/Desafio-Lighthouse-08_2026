@@ -39,6 +39,14 @@ Cada subpasta contém a solução técnica acompanhada de documentação explica
   * *Bibliotecas Externas:* `pandas`, `numpy`
 * **SQL** (ANSI SQL / PostgreSQL Dialect)
 
+### 🤖 Agentes de IA
+
+* **GitHub Copilot**
+* **Gemini 3.6**
+* **Codex**
+
+*Auxiliaram na revisão de código, documentação, e sugestões de boas práticas.*
+
 ---
 
 ## 📁 Estrutura do Repositório
