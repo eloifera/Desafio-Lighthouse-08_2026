@@ -4,6 +4,8 @@
 * **Empresa Fictícia:** LH Nautical
 * **Área:** Dados e IA
 
+Acesse a dashboard interativa com a resolução completa do desafio [clicando aqui](link_da_dashboard).
+
 ---
 
 ## 📌 Sobre o Repositório
@@ -53,6 +55,7 @@ Cada subpasta contém a solução técnica acompanhada de documentação explica
 
 ```text
 .
+├── dashboard/                          <-- Pasta contendo a dashboard interativa
 ├── README.md                           <-- Documentação principal do repositório
 └── resolucoes_questoes/                <-- Pasta contendo a entrega de todas as questões
     ├── questao_1/                      <-- Análise Exploratória de Dados (EDA)
