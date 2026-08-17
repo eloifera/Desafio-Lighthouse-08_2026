@@ -4,7 +4,7 @@
 * **Empresa Fictícia:** LH Nautical
 * **Área:** Dados e IA
 
-Acesse a dashboard interativa com a resolução completa do desafio [clicando aqui](link_da_dashboard).
+Acesse a dashboard interativa com a resolução completa do desafio [clicando aqui](https://desafio-lighthouse-082026-eloifera.streamlit.app/).
 
 ---
 
