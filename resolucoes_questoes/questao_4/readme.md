@@ -12,6 +12,6 @@ Na pasta `resolucoes_questoes/questao_4`, encontram-se os seguintes arquivos:
 
 ```text
 📁 resolucoes_questoes/questao_4/
-├── consulta_q4.sql   # Consulta SQL da Questão 4, com CTEs independentes
+├── consulta_q4_1.sql   # Consulta SQL da Questão 4, com CTEs independentes
 └── readme.md         # Este arquivo que você está lendo, uma documentação técnica simples da solução
 ```
