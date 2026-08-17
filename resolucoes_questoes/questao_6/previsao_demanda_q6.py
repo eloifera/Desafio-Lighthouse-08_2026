@@ -12,9 +12,10 @@ Este script:
 5. Avalia o desempenho do modelo no 1º trimestre de 2026 através da métrica
     MAE (Mean Absolute Error).
 
-Lembre-se de instalar a biblioteca 'psycopg2' antes de executar o script e definir
-as variáveis de conexão do PostgreSQL, se necessário, pelas constantes PG_HOST,
-PG_PORT, PG_DB, PG_USER e PG_PASS.
+Lembre-se de instalar a biblioteca 'psycopg2', 'pandas' e 'numpy'
+    antes de executar o script e definir as variáveis de conexão do
+    PostgreSQL, se necessário, pelas constantes PG_HOST, PG_PORT, PG_DB,
+    PG_USER e PG_PASS.
 """
 
 import os
@@ -90,7 +91,8 @@ def executar_previsao_demanda_postgresql():
 
     full_series = df.set_index("ano_mes")[
         "quantidade_vendida"
-    ]  # Cria uma série temporal com o índice sendo 'ano_mes' e os valores sendo 'quantidade_vendida'
+    ]  # Cria uma série temporal com o índice sendo 'ano_mes'
+    # e os valores sendo 'quantidade_vendida'
 
     # Vendas reais do treino (final de 2025)
     v_oct = float(full_series["2025-10"])
